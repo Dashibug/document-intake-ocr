@@ -1,32 +1,33 @@
 # Document Intake OCR
 
-## Problem
-The system performs primary processing of personal document images:
-alignment, OCR, field extraction and visualization.
+Сервис для первичной обработки фото документов (банковские карты, ID-карты, водительские удостоверения).
 
-## Supported documents
-- bank cards
-- ID cards
-- driver licenses
+## Что делает
+1) Принимает изображение через REST API  
+2) Пытается выровнять документ на фото (перспектива/поворот)  
+3) Распознаёт текст на выровненном изображении с помощью **EasyOCR (PyTorch)**  
+4) Рисует найденные области текста (bbox) на изображении  
+5) Пытается извлечь из текста основные поля (например: ФИО, дата рождения, номер документа / для карты — номер, срок действия)  
+6) Возвращает:
+- JSON с результатами (тип документа, распознанный текст, извлечённые поля, предупреждения)
+- ссылки на сохранённые файлы: `input`, `aligned`, `annotated`
 
-## Architecture
-Input image -> Alignment -> OCR -> Text normalization -> Document classification -> Field extraction -> JSON + annotated image
-
-## Why PaddleOCR
-PaddleOCR was selected as the default OCR backend because it provides local OCR inference, text detection and recognition, supports multilingual scenarios and can run on CPU/GPU.
-
-## Why rule-based extraction
-For a small test task, rule-based extraction is more transparent and easier to validate than training a KIE model from scratch.
-
-## Limitations
-- Works best with rectangular documents.
-- Does not guarantee perfect extraction for all country-specific IDs.
-- LLM extraction is optional and disabled by default.
-- Personal data is not sent to external APIs unless explicitly enabled.
-
-## Run
+## Как запустить
+```bash
+cp .env.example .env
 docker compose up --build
+```
+## После запуска Swagger:
+```bash
+http://localhost:8000/docs
+```
 
-## API example
-curl -X POST http://localhost:8000/api/v1/process \
-  -F "file=@samples/input/card.jpg"
+## Эндпоинты
+GET /api/v1/health — проверка, что сервис жив
+POST /api/v1/process — обработка изображения
+
+## Пример запроса:
+```bash
+curl -X POST "http://localhost:8000/api/v1/process" \
+  -F "file=@samples/input/test.jpg"
+```
