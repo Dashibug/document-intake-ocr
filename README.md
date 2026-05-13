@@ -17,7 +17,7 @@
 cp .env.example .env
 docker compose up --build
 ```
-## После запуска Swagger:
+## После запуска:
 ```bash
 http://localhost:8000/docs
 ```
