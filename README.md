@@ -14,7 +14,6 @@
 
 ## Как запустить
 ```bash
-cp .env.example .env
 docker compose up --build
 ```
 ## После запуска:
