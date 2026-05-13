@@ -1,0 +1,21 @@
+# env
+.env
+
+# python
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# artifacts & downloaded models
+artifacts/
+models/
+
+# local samples (do not commit personal docs)
+samples/input/
+
+# mac
+.DS_Store
